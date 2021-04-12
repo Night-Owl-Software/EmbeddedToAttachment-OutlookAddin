@@ -1,21 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
 using Outlook = Microsoft.Office.Interop.Outlook;
-using Office = Microsoft.Office.Core;
-using System.Windows.Forms;
 
 namespace EmbeddedToAttachment
 {
     public partial class ThisAddIn
     {
-        string appFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Night Owl Software\Outlook Add-ins\Embedded Image to Attachment Add-in");
-        string imageCacheFolder;
-        string settingsFile;
-        string blacklistFile;
+        // Create private fields
+        private string appFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Night Owl Software\Outlook Add-ins\Embedded Image to Attachment Add-in");
+        private string imageCacheFolder;
+        private string settingsFile;
+        private string blacklistFile;
 
         Outlook.NameSpace outlookNameSpace;
         Outlook.MAPIFolder inbox;
@@ -54,49 +50,76 @@ namespace EmbeddedToAttachment
         }
 
         void items_ItemAdd(object Item) {
+            // Grab the received mail message
             Outlook.MailItem mail = (Outlook.MailItem)Item;
+            
+            if(Item != null) {
 
-            if(Item != null) {                
-                if(mail.Attachments.Count > 0) {
+                CheckForEmbeddedImages(mail);
 
-                    List<Outlook.Attachment> imageAttachments = new List<Outlook.Attachment>();
-
-                    foreach(Outlook.Attachment attachment in mail.Attachments) {
-
-                        if(attachment.FileName.ToUpper().Contains(".JPG") ||
-                            attachment.FileName.ToUpper().Contains(".PNG") ||
-                            attachment.FileName.ToUpper().Contains(".TIF") ||
-                            attachment.FileName.ToUpper().Contains(".TIFF") ||
-                            attachment.FileName.ToUpper().Contains(".BMP")) {
-
-                            imageAttachments.Add(attachment);
-                        }
-                    }
-
-                    if(imageAttachments.Count > 0) {
-                        string tempSubject = mail.Subject;
-
-                        mail.Subject = $"[ATTACHMENTS] {tempSubject}";
-
-                        foreach(Outlook.Attachment image in imageAttachments) {
-                            string fileName = image.FileName;
-                            image.SaveAsFile($"{imageCacheFolder}\\{fileName}");
-                            AddAttachment(mail, fileName);
-                        }
-
-                        foreach(Outlook.Attachment image in imageAttachments) {
-                            string fileName = image.FileName;
-                            File.Delete($"{imageCacheFolder}\\{fileName}");
-                        }
-                    }
-                }
             }
 
         }
 
+        /// <summary>
+        /// Attaches the provided file to the provided Outlook MailItem as a regular attachment
+        /// </summary>
+        /// <param name="mail">OUtlook MailItem to attach files to</param>
+        /// <param name="fileName">Full File Path of item to add to MailItem</param>
         private void AddAttachment(Outlook.MailItem mail, string fileName) {
             if(fileName.Length > 0) {
                 mail.Attachments.Add($"{imageCacheFolder}\\{fileName}", Outlook.OlAttachmentType.olByValue, mail.Attachments.Count + 1, fileName);
+            }
+        }
+
+        private void CheckForEmbeddedImages(Outlook.MailItem mail) {
+            // Check for any attachments (embedded or otherwise)
+            if(mail.Attachments.Count > 0) {
+
+                // Create a blank list to store embedded image files into for iteration later
+                List<Outlook.Attachment> embeddedImages = new List<Outlook.Attachment>();
+
+                foreach(Outlook.Attachment attachment in mail.Attachments) {
+                    string fileName = attachment.FileName;
+
+                    // Look for any image-specific file extensions in the attachments
+                    if(fileName.ToUpper().Contains(".JPG") ||
+                        fileName.ToUpper().Contains(".PNG") ||
+                        fileName.ToUpper().Contains(".TIF") ||
+                        fileName.ToUpper().Contains(".TIFF") ||
+                        fileName.ToUpper().Contains(".BMP")) {
+
+                        // Check if attachment is included in the HTML Body, rather than in the Attachments DIV section
+                        // This means it is definitely an embedded image, so we need to make a copy of it
+                        if(mail.HTMLBody.Contains($"cid:{fileName}")) {
+
+                            embeddedImages.Add(attachment);
+
+                        }
+                    }
+                }
+
+                // If we found embedded images, lets iterate through them
+                if(embeddedImages.Count > 0) {
+
+                    // First, iterate through and save all the images to a local, temporary image-cache
+                    // Then, using that cache, re-attach the images to the mail as regular attachments
+                    foreach(Outlook.Attachment image in embeddedImages) {
+                        string fileName = image.FileName;
+                        image.SaveAsFile($"{imageCacheFolder}\\{fileName}");
+                        AddAttachment(mail, fileName);
+                    }
+
+                    // Once the attachment process is finished, work throught he list again
+                    // and delete all the image files we created
+                    foreach(Outlook.Attachment image in embeddedImages) {
+                        string fileName = image.FileName;
+                        File.Delete($"{imageCacheFolder}\\{fileName}");
+                    }
+                }
+
+                // Empty out our list for good measure, now that we're done
+                embeddedImages.Clear();
             }
         }
 
