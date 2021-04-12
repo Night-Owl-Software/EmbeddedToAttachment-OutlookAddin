@@ -182,9 +182,19 @@
     can be found.
   -->
   <ItemGroup>
+    <Compile Include="Common.cs" />
+    <Compile Include="EmbeddedToAttachmentRibbonButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="EmbeddedToAttachmentRibbonButton.Designer.cs">
+      <DependentUpon>EmbeddedToAttachmentRibbonButton.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="EmbeddedToAttachmentRibbonButton.resx">
+      <DependentUpon>EmbeddedToAttachmentRibbonButton.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -193,6 +203,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="EmbeddedToAttachment_1_TemporaryKey.pfx" />
     <None Include="EmbeddedToAttachment_TemporaryKey.pfx" />
@@ -214,6 +225,9 @@
       <DependentUpon>ThisAddIn.Designer.xml</DependentUpon>
     </Compile>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EmbedToAttach.png" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
