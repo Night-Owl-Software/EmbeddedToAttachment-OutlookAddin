@@ -34,6 +34,7 @@ namespace EmbeddedToAttachment {
 
                     // Create a blank list to store embedded image files into for iteration later
                     List<Outlook.Attachment> embeddedImages = new List<Outlook.Attachment>();
+                    List<Outlook.Attachment> attachmentOnlyImages = new List<Outlook.Attachment>();
 
                     foreach(Outlook.Attachment attachment in activeMailItem.Attachments) {
                         string fileName = attachment.FileName;
@@ -43,6 +44,8 @@ namespace EmbeddedToAttachment {
                             fileName.ToUpper().Contains(".PNG") ||
                             fileName.ToUpper().Contains(".TIF") ||
                             fileName.ToUpper().Contains(".TIFF") ||
+                            fileName.ToUpper().Contains(".HEIC") ||
+                            fileName.ToUpper().Contains(".HEIF") ||
                             fileName.ToUpper().Contains(".BMP")) {
 
                             // Check if attachment is included in the HTML Body, rather than in the Attachments DIV section

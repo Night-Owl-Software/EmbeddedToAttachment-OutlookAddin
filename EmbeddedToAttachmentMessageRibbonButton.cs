@@ -6,7 +6,7 @@ using System.Text;
 using Outlook = Microsoft.Office.Interop.Outlook;
 
 namespace EmbeddedToAttachment {
-    public partial class EmbeddedToAttachmentRibbonButton {
+    public partial class EmbeddedToAttachmentMessageRibbonButton {
         private void EmbeddedToAttachmentRibbonButton_Load(object sender, RibbonUIEventArgs e) {
 
         }

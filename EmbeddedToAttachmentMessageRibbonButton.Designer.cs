@@ -1,12 +1,12 @@
 ﻿
 namespace EmbeddedToAttachment {
-    partial class EmbeddedToAttachmentRibbonButton : Microsoft.Office.Tools.Ribbon.RibbonBase {
+    partial class EmbeddedToAttachmentMessageRibbonButton : Microsoft.Office.Tools.Ribbon.RibbonBase {
         /// <summary>
         /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        public EmbeddedToAttachmentRibbonButton()
+        public EmbeddedToAttachmentMessageRibbonButton()
             : base(Globals.Factory.GetRibbonFactory()) {
             InitializeComponent();
         }
@@ -29,44 +29,44 @@ namespace EmbeddedToAttachment {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.tabEmbedAttach = this.Factory.CreateRibbonTab();
+            this.tabEmbedAttachMessage = this.Factory.CreateRibbonTab();
             this.grpEmbedToAttach = this.Factory.CreateRibbonGroup();
             this.btnEmbedToAttach = this.Factory.CreateRibbonButton();
-            this.tabEmbedAttach.SuspendLayout();
+            this.tabEmbedAttachMessage.SuspendLayout();
             this.grpEmbedToAttach.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabEmbedAttach
+            // tabEmbedAttachMessage
             // 
-            this.tabEmbedAttach.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
-            this.tabEmbedAttach.ControlId.OfficeId = "TabReadMessage";
-            this.tabEmbedAttach.Groups.Add(this.grpEmbedToAttach);
-            this.tabEmbedAttach.Label = "TabReadMessage";
-            this.tabEmbedAttach.Name = "tabEmbedAttach";
+            this.tabEmbedAttachMessage.ControlId.ControlIdType = Microsoft.Office.Tools.Ribbon.RibbonControlIdType.Office;
+            this.tabEmbedAttachMessage.ControlId.OfficeId = "TabReadMessage";
+            this.tabEmbedAttachMessage.Groups.Add(this.grpEmbedToAttach);
+            this.tabEmbedAttachMessage.Label = "TabReadMessage";
+            this.tabEmbedAttachMessage.Name = "tabEmbedAttachMessage";
             // 
             // grpEmbedToAttach
             // 
             this.grpEmbedToAttach.Items.Add(this.btnEmbedToAttach);
-            this.grpEmbedToAttach.Label = "Embed To Attach";
+            this.grpEmbedToAttach.Label = "Embedded to Attached";
             this.grpEmbedToAttach.Name = "grpEmbedToAttach";
             // 
             // btnEmbedToAttach
             // 
             this.btnEmbedToAttach.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.btnEmbedToAttach.Image = global::EmbeddedToAttachment.Properties.Resources.EmbedToAttach;
-            this.btnEmbedToAttach.Label = "Embed to Attach";
+            this.btnEmbedToAttach.Label = "Convert...";
             this.btnEmbedToAttach.Name = "btnEmbedToAttach";
             this.btnEmbedToAttach.ShowImage = true;
             this.btnEmbedToAttach.Click += new Microsoft.Office.Tools.Ribbon.RibbonControlEventHandler(this.btnEmbedToAttach_Click);
             // 
-            // EmbeddedToAttachmentRibbonButton
+            // EmbeddedToAttachmentMessageRibbonButton
             // 
-            this.Name = "EmbeddedToAttachmentRibbonButton";
+            this.Name = "EmbeddedToAttachmentMessageRibbonButton";
             this.RibbonType = "Microsoft.Outlook.Mail.Read";
-            this.Tabs.Add(this.tabEmbedAttach);
+            this.Tabs.Add(this.tabEmbedAttachMessage);
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.EmbeddedToAttachmentRibbonButton_Load);
-            this.tabEmbedAttach.ResumeLayout(false);
-            this.tabEmbedAttach.PerformLayout();
+            this.tabEmbedAttachMessage.ResumeLayout(false);
+            this.tabEmbedAttachMessage.PerformLayout();
             this.grpEmbedToAttach.ResumeLayout(false);
             this.grpEmbedToAttach.PerformLayout();
             this.ResumeLayout(false);
@@ -75,14 +75,14 @@ namespace EmbeddedToAttachment {
 
         #endregion
 
-        internal Microsoft.Office.Tools.Ribbon.RibbonTab tabEmbedAttach;
+        internal Microsoft.Office.Tools.Ribbon.RibbonTab tabEmbedAttachMessage;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpEmbedToAttach;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnEmbedToAttach;
     }
 
     partial class ThisRibbonCollection {
-        internal EmbeddedToAttachmentRibbonButton EmbeddedToAttachmentRibbonButton {
-            get { return this.GetRibbon<EmbeddedToAttachmentRibbonButton>(); }
+        internal EmbeddedToAttachmentMessageRibbonButton EmbeddedToAttachmentRibbonButton {
+            get { return this.GetRibbon<EmbeddedToAttachmentMessageRibbonButton>(); }
         }
     }
 }

@@ -35,10 +35,12 @@ namespace EmbeddedToAttachment
                     Outlook.OlDefaultFolders.olFolderInbox);
 
             // Get a list of inbox items and add an event flag for when new items are added (a message is received)
-            items = inbox.Items;
-            items.ItemAdd +=
-                new Outlook.ItemsEvents_ItemAddEventHandler(Items_ItemAdd);
+                // EVENT IS CURRENTLY DISABLED, AUTOMATED CONVERSION CAUSING TOO MUCH MEMORY OVERHEAD
+            //items = inbox.Items;
+            //items.ItemAdd +=
+            //    new Outlook.ItemsEvents_ItemAddEventHandler(Items_ItemAdd);
 
+            // Set Event to Trigger any time a new window takes focus
             currentExplorer = Application.ActiveExplorer();
             currentExplorer.SelectionChange += new Outlook
                 .ExplorerEvents_10_SelectionChangeEventHandler
