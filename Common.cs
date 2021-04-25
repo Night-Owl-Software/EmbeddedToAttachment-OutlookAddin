@@ -36,27 +36,42 @@ namespace EmbeddedToAttachment {
                     List<Outlook.Attachment> embeddedImages = new List<Outlook.Attachment>();
                     List<Outlook.Attachment> attachmentOnlyImages = new List<Outlook.Attachment>();
 
+                    var htmlTxt = @"C:\Temp\html.txt";
+                    File.Delete(htmlTxt);
+                    FileStream fsHTml = File.OpenWrite(htmlTxt);
+                    string htmlEntry = $"\r\n{activeMailItem.HTMLBody}\r\n";
+                    byte[] htmlBytes = Encoding.UTF8.GetBytes(htmlEntry);
+                    fsHTml.Write(htmlBytes, 0, htmlBytes.Length);
+
+                    var attachmentTxt = @"C:\Temp\files.txt";
+                    File.Delete(attachmentTxt);
+                    FileStream fs = File.OpenWrite(attachmentTxt);
+
                     foreach(Outlook.Attachment attachment in activeMailItem.Attachments) {
                         string fileName = attachment.FileName;
+                        string fileEntry = $"{fileName}\r\n";
 
-                        // Look for any image-specific file extensions in the attachments
-                        if(fileName.ToUpper().Contains(".JPG") ||
-                            fileName.ToUpper().Contains(".PNG") ||
-                            fileName.ToUpper().Contains(".TIF") ||
-                            fileName.ToUpper().Contains(".TIFF") ||
-                            fileName.ToUpper().Contains(".HEIC") ||
-                            fileName.ToUpper().Contains(".HEIF") ||
-                            fileName.ToUpper().Contains(".BMP")) {
+                        byte[] textBytes = Encoding.UTF8.GetBytes(fileEntry);
+                        
+                        fs.Write(textBytes, 0, textBytes.Length);
 
-                            // Check if attachment is included in the HTML Body, rather than in the Attachments DIV section
-                            // This means it is definitely an embedded image, so we need to make a copy of it
-                            if(activeMailItem.HTMLBody.Contains($"cid:{fileName}")) {
+                            // Look for any image-specific file extensions in the attachments
+                            if(fileName.ToUpper().Contains(".JPG") ||
+                                fileName.ToUpper().Contains(".JPEG") ||
+                                fileName.ToUpper().Contains(".PNG") ||
+                                fileName.ToUpper().Contains(".TIF") ||
+                                fileName.ToUpper().Contains(".TIFF") ||
+                                fileName.ToUpper().Contains(".HEIC") ||
+                                fileName.ToUpper().Contains(".HEIF") ||
+                                fileName.ToUpper().Contains(".BMP")) {
 
-                                embeddedImages.Add(attachment);
+                                    embeddedImages.Add(attachment);
 
                             }
-                        }
                     }
+
+                    fsHTml.Dispose();
+                    fs.Dispose();
 
                     // If we found embedded images, lets iterate through them
                     if(embeddedImages.Count > 0) {
@@ -95,18 +110,16 @@ namespace EmbeddedToAttachment {
 
                     // Look for any image-specific file extensions in the attachments
                     if(fileName.ToUpper().Contains(".JPG") ||
+                        fileName.ToUpper().Contains(".JPEG") ||
                         fileName.ToUpper().Contains(".PNG") ||
                         fileName.ToUpper().Contains(".TIF") ||
                         fileName.ToUpper().Contains(".TIFF") ||
+                        fileName.ToUpper().Contains(".HEIC") ||
+                        fileName.ToUpper().Contains(".HEIF") ||
                         fileName.ToUpper().Contains(".BMP")) {
 
-                        // Check if attachment is included in the HTML Body, rather than in the Attachments DIV section
-                        // This means it is definitely an embedded image, so we need to make a copy of it
-                        if(mail.HTMLBody.Contains($"cid:{fileName}")) {
+                        embeddedImages.Add(attachment);
 
-                            embeddedImages.Add(attachment);
-
-                        }
                     }
                 }
 
